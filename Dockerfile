@@ -3,7 +3,7 @@
 # Wir verwenden Node.js 20 auf Alpine Linux zum Bauen.
 # Alpine ist eine sehr kleine Linux-Distribution (~5 MB).
 # ─────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM public.ecr.aws/docker/library/node:20-alpine AS builder
 
 # Arbeitsverzeichnis im Container festlegen
 WORKDIR /app
@@ -30,7 +30,7 @@ RUN npm run build
 # Nginx ist optimiert für das schnelle Ausliefern
 # von statischen Dateien.
 # ─────────────────────────────────────────────────
-FROM nginx:alpine AS production
+FROM public.ecr.aws/docker/library/nginx:alpine AS production
 
 # Nginx-Konfiguration aus dem Projekt-Repository kopieren.
 # Diese Datei sorgt dafür, dass React Router korrekt funktioniert.
