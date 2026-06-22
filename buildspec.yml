@@ -8,9 +8,10 @@ phases:
     commands:
       # ── Vorbereitung ──────────────────────────────────────────────
       # Melde uns bei Amazon ECR an.
-      # Die Umgebungsvariablen AWS_DEFAULT_REGION und AWS_ACCOUNT_ID
-      # werden von CodeBuild automatisch bereitgestellt.
+      # AWS_DEFAULT_REGION stellt CodeBuild automatisch bereit.
+      # AWS_ACCOUNT_ID jedoch NICHT - wir ermitteln sie dynamisch via STS.
       - echo "Anmelden bei Amazon ECR in Region $AWS_DEFAULT_REGION..."
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # Image-Tag aus dem Git-Commit-Hash generieren.
       # So hat jedes Image einen eindeutigen, nachvollziehbaren Tag.
